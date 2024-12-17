@@ -1,21 +1,50 @@
 @import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
+@keyframes border-anim2 {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 400% 0%;
+  }
+}
+@keyframes border-anim3 {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 400% 0%;
+  }
+}
+
 body {
-  background: #f0f0f0;
+  background-image: linear-gradient(
+    90deg,
+    #ffffff, /* สีขาว */
+    #f9f9f9, /* เทาอ่อนมาก */
+    #ffeafa, /* เทาอ่อนกลาง */
+    #fdf1ff, /* เทาอ่อนขึ้นมาอีกนิด */
+    rgb(255, 255, 255)  /* เทาอ่อนเข้มสุด */
+  );
   font-family: "Kanit", serif;
   height: 100vh;
+  background-size: 400% 100%; /* ขยาย background ให้เกิด animation ไหล */
+  animation: border-anim2 20s linear infinite; /* ความเร็วการเคลื่อนไหว */
+  margin: 0; /* ลบ margin เริ่มต้นของ body */
 }
 .h1-cus {
   font-size: 125px;
   display: flex;
   justify-content: center;
   font-weight: 500;
+  font-family: "Kanit", serif;
   background-image: linear-gradient(to right, #ffd384, #ababab);
   -webkit-background-clip: text;
   color: #00000000;
 }
 .h2-cus {
   font-size: 65px;
+  font-family: "Kanit", serif;
   color: black;
   display: flex;
   justify-content: center;
@@ -116,7 +145,7 @@ body {
   border-radius: 8px;
   z-index: -1;
   background-size: 400% 400%;
-  animation: border-anim 3s linear infinite;
+  animation: border-anim 5s linear infinite;
   width: 1cap;
 }
 
@@ -150,4 +179,33 @@ body {
   align-items: center;
   margin-top: 20px;
   font-size: 30px;
+  padding: 20px;
+  background-image: linear-gradient(
+    90deg,
+    #ffffff, /* สีขาว */
+    #f9f9f9, /* เทาอ่อนมาก */
+    #ffeafa, /* เทาอ่อนกลาง */
+    #fdf1ff, /* เทาอ่อนขึ้นมาอีกนิด */
+    rgb(255, 255, 255)  /* เทาอ่อนเข้มสุด */
+  );
+  font-family: "Kanit", serif;
+
+  background-size: 400% 100%; /* ขยาย background ให้เกิด animation ไหล */
+  // animation: border-anim3 20s linear infinite; /* ความเร็วการเคลื่อนไหว */
+  margin: 0; /* ลบ margin เริ่มต้นของ body */
+
+  p {
+    color: #bf9d60;
+    margin: 10px 0; /* เว้นระยะระหว่างแต่ละบรรทัด */
+    font-weight: bold;
+    text-transform: uppercase; /* ตัวพิมพ์ใหญ่ทั้งหมด */
+    font-size: 24px;
+
+    span {
+      color: #838383;
+      font-weight: normal;
+      text-transform: none; /* คืนค่าให้ span เป็นตัวปกติ */
+    }
+  }
 }
+

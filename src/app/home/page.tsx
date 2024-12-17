@@ -53,7 +53,7 @@ const Home = () => {
 
     return (
       <>
-           <p  className="h2-cus">NO Trigger</p>
+           <p  className="h2-cus">NO TRIGGER</p>
 
       <div className="sensor-cards">
         {cardIds.map((id) => {
@@ -65,13 +65,13 @@ const Home = () => {
             <div
               key={id}
               className="card"
-              // className={`card ${isOnline ? 'online' : 'offline'}`} // ใช้ class 'offline' ถ้าออฟไลน
+            
             >
               <div className={`box ${isOnline ? 'online' : 'offline'}`}>
           
               </div>
               <div className="mg">
-              <h3>Sensor {id}</h3>
+              <h3>BOARD {id}</h3>
               {isOnline ? (
                 <p>{sensor?.distance.toFixed(0)} </p>
               ) : (
@@ -90,7 +90,6 @@ const Home = () => {
   };
 
   // Component สำหรับแสดงข้อมูล trigger
-// Component สำหรับแสดงข้อมูล trigger
 const TriggerComponent = () => {
   const foundIDs = triggerData?.foundIDs.split(',').map(id => id.trim()) || [];
   const notFoundIDs = triggerData?.notFoundIDs.split(',').map(id => id.trim()) || [];
@@ -100,11 +99,11 @@ const TriggerComponent = () => {
 
   return (
     <div>
-      <p className="h2-cus">Trigger Data</p>
+      <p className="h2-cus">TRIGGER DATA</p>
       <div className="des">
-      <p>Condition: {triggerData?.condition}</p>
-      <p>Found IDs: {triggerData?.foundIDs}</p>
-      <p>Not Found IDs: {triggerData?.notFoundIDs}</p>
+      <p>Condition: <span>{triggerData?.condition}</span> </p>
+      <p>Found IDs: <span>{triggerData?.foundIDs}</span></p>
+      <p>Not Found IDs: <span>{triggerData?.notFoundIDs}</span></p>
       </div>
    
 
@@ -120,7 +119,7 @@ const TriggerComponent = () => {
               <div className={`box ${isFound ? 'online' : 'offline'}`}>
               </div>
               <div className="mg">
-                <h3>Sensor {id}</h3>
+                <h3>BOARD {id}</h3>
                 <p>{isFound ? 'Found' : 'Not Found'}</p>
               </div>
               <div className={`status ${isFound ? 'status-online' : 'status-offline'}`}>
