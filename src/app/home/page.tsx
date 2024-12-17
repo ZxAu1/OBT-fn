@@ -25,7 +25,7 @@ const Home = () => {
 
   useEffect(() => {
     // เชื่อมต่อกับ WebSocket server
-    const socket = io('http://localhost:4321');
+    const socket = io('http://191.20.207.115:4321');
 
     socket.on('flowUpdate', (data: NoTriggerData | TriggerData) => {
       console.log(data);
@@ -49,7 +49,7 @@ const Home = () => {
   // Component สำหรับแสดงข้อมูล notrigger
   const NoTriggerComponent = () => {
     // สร้าง array ของ sensor cards 8 ใบ
-    const cardIds = Array.from({ length: 8 }, (_, index) => index + 1);
+    const cardIds = Array.from({ length: 12 }, (_, index) => index + 1);
 
     return (
       <>
@@ -73,7 +73,7 @@ const Home = () => {
               <div className="mg">
               <h3>Sensor {id}</h3>
               {isOnline ? (
-                <p>{sensor?.distance.toFixed(2)} meters</p>
+                <p>{sensor?.distance.toFixed(0)} </p>
               ) : (
                 <p>Offline</p>
               )}
@@ -90,14 +90,49 @@ const Home = () => {
   };
 
   // Component สำหรับแสดงข้อมูล trigger
-  const TriggerComponent = () => (
+// Component สำหรับแสดงข้อมูล trigger
+const TriggerComponent = () => {
+  const foundIDs = triggerData?.foundIDs.split(',').map(id => id.trim()) || [];
+  const notFoundIDs = triggerData?.notFoundIDs.split(',').map(id => id.trim()) || [];
+
+  // รวม foundIDs และ notFoundIDs ไว้ใน Array เดียว
+  const allIDs = [...foundIDs, ...notFoundIDs];
+
+  return (
     <div>
-      <p  className="h2-cus">Trigger Data</p>
+      <p className="h2-cus">Trigger Data</p>
+      <div className="des">
       <p>Condition: {triggerData?.condition}</p>
       <p>Found IDs: {triggerData?.foundIDs}</p>
       <p>Not Found IDs: {triggerData?.notFoundIDs}</p>
+      </div>
+   
+
+      <div className="sensor-cards">
+        {allIDs.map((id, index) => {
+          const isFound = foundIDs.includes(id);
+
+          return (
+            <div
+              key={index}
+              className="card"
+            >
+              <div className={`box ${isFound ? 'online' : 'offline'}`}>
+              </div>
+              <div className="mg">
+                <h3>Sensor {id}</h3>
+                <p>{isFound ? 'Found' : 'Not Found'}</p>
+              </div>
+              <div className={`status ${isFound ? 'status-online' : 'status-offline'}`}>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
+};
+
 
   return (
     <div>

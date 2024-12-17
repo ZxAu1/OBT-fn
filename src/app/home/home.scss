@@ -17,8 +17,7 @@ body {
 .h2-cus {
   font-size: 65px;
   color: black;
-  display: flex
-;
+  display: flex;
   justify-content: center;
   font-weight: 300;
   background-image: linear-gradient(to right, #717171, #fffcfc);
@@ -122,10 +121,33 @@ body {
 }
 
 .status-online {
-  background-image: linear-gradient(90deg, #f7e2ff, #fce0fd, #f5a1dd, #fce9ff, #eefbfd);
+  background-image: linear-gradient(
+    90deg,
+    #f7e2ff,
+    #fce0fd,
+    #f5a1dd,
+    #fce9ff,
+    #eefbfd
+  );
 }
 
 .status-offline {
-  background-image: linear-gradient(90deg, #ffbaba, #fdbbb7, #fb8f8f, #f9a29c, #e57373);
+  background-image: linear-gradient(
+    90deg,
+    #ffbaba,
+    #fdbbb7,
+    #fb8f8f,
+    #f9a29c,
+    #e57373
+  );
   animation: none;
+}
+.des {
+  color: black;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 30px;
 }
