@@ -18,18 +18,19 @@
 }
 
 body {
-  background-image: linear-gradient(
-    90deg,
-    #ffffff, /* สีขาว */
-    #f9f9f9, /* เทาอ่อนมาก */
-    #ffeafa, /* เทาอ่อนกลาง */
-    #fdf1ff, /* เทาอ่อนขึ้นมาอีกนิด */
-    rgb(255, 255, 255)  /* เทาอ่อนเข้มสุด */
-  );
+  // background-image: linear-gradient(
+  //   90deg,
+  //   #ffffff, /* สีขาว */
+  //   #f9f9f9, /* เทาอ่อนมาก */
+  //   #ffeafa, /* เทาอ่อนกลาง */
+  //   #fdf1ff, /* เทาอ่อนขึ้นมาอีกนิด */
+  //   rgb(255, 255, 255)  /* เทาอ่อนเข้มสุด */
+  // );
+  background-color: #f3f3f3;
   font-family: "Kanit", serif;
   height: 100vh;
   background-size: 400% 100%; /* ขยาย background ให้เกิด animation ไหล */
-  animation: border-anim2 20s linear infinite; /* ความเร็วการเคลื่อนไหว */
+  // animation: border-anim2 20s linear infinite; /* ความเร็วการเคลื่อนไหว */
   margin: 0; /* ลบ margin เริ่มต้นของ body */
 }
 .h1-cus {
@@ -180,14 +181,7 @@ body {
   margin-top: 20px;
   font-size: 30px;
   padding: 20px;
-  background-image: linear-gradient(
-    90deg,
-    #ffffff, /* สีขาว */
-    #f9f9f9, /* เทาอ่อนมาก */
-    #ffeafa, /* เทาอ่อนกลาง */
-    #fdf1ff, /* เทาอ่อนขึ้นมาอีกนิด */
-    rgb(255, 255, 255)  /* เทาอ่อนเข้มสุด */
-  );
+
   font-family: "Kanit", serif;
 
   background-size: 400% 100%; /* ขยาย background ให้เกิด animation ไหล */
