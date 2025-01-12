@@ -42,6 +42,9 @@ body {
   background-image: linear-gradient(to right, #ffd384, #ababab);
   -webkit-background-clip: text;
   color: #00000000;
+  // @media only screen and (min-width: 400px) {
+  //   font-size: 75px;
+  // }
 }
 .h2-cus {
   font-size: 65px;
@@ -61,6 +64,9 @@ body {
   padding: 20px; /* Add padding around the grid */
   justify-items: center; /* Center the cards horizontally */
   margin-top: 100px;
+  // @media only screen and (min-width: 400px) {
+  //   grid-template-columns: repeat(1, 1fr); /* 4 cards per row */
+  // }
 }
 
 .card {
@@ -203,3 +209,22 @@ body {
   }
 }
 
+// .login-container {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   gap: 5px;
+// }
+// .align-input {
+//   width: 25%;
+//   padding: 10px;
+// }
+// .btn-login {
+//   padding: 15px 29px;
+//   margin-left: 202px;
+//   border-radius: 13px;
+//   background: #717171;
+// }
+// .flex-btn {
+//   display: flex;
+// }

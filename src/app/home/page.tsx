@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import "./home.scss";
 
 interface SensorData {
@@ -18,100 +19,75 @@ interface TriggerData {
 const Home = () => {
   const [sensorData, setSensorData] = useState<SensorData[]>([]);
   const [triggerData, setTriggerData] = useState<TriggerData | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  const handleLogin = () => {
+    if (inputValue === "123") {
+      setIsAuthorized(true);
+    } else {
+      alert("ไม่ผ่าน ไม่สามารถเข้าใช้งานได้");
+    }
+  };
 
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.137.3:81/ws");
-
-    socket.onopen = () => {
-      console.log("WebSocket connection established");
-      socket.send(
-        JSON.stringify({
-          event: "register",
-          id: "clientB",
-        })
-      );
-    };
-
-    socket.onmessage = (event) => {
-      try {
-        const response = JSON.parse(event.data);
-        console.log("Received data:", response);
-
-        if (!response.event) {
-          console.error("Missing event type in response");
-          return;
-        }
-
-        switch (response.event) {
-          case "welcome":
-            console.log("Welcome message:", response.message);
-            break;
-
-          case "registered":
-            console.log("Registered message:", response.message);
-            break;
-
-          case "sensor_data":
-            if (response.type === "nottrigger") {
-              if (Array.isArray(response.message)) {
-                setSensorData(response.message);
-                setTriggerData(null);
-              }
-            } else if (response.type === "trigger" && response.message) {
-              const foundBoards = parseSensorData(response.message.foundIDs);
-              const notFoundBoards = parseSensorData(response.message.notFoundIDs);
-              setTriggerData({
-                type: "trigger",
-                condition: response.message.condition,
-                foundBoards,
-                notFoundBoards,
-              });
-              setSensorData([]);
-            }
-            break;
-
-          case "error":
-            console.error("Server error:", response.message);
-            break;
-
-          default:
-            console.warn("Unknown event type:", response.event);
-        }
-      } catch (error) {
-        console.error("Error parsing WebSocket message:", error);
+    const socket = io("http://191.20.207.115:81");
+  
+    socket.on("connect", () => {
+      console.log("Socket.IO connected.");
+    });
+  
+    socket.on("sensor_data", (data) => {
+      if (data.type === "trigger") {
+        setTriggerData({
+          type: "trigger",
+          condition: data.condition,
+          foundBoards: Array.isArray(data.foundIDs)
+            ? data.foundIDs.map((board: { id: any; distance: any; }) => ({
+                id: board.id,
+                distance: board.distance,
+              }))
+            : [],
+          notFoundBoards: Array.isArray(data.notFoundIDs)
+            ? data.notFoundIDs.map((board: { id: any; distance: any; }) => ({
+                id: board.id,
+                distance: board.distance,
+              }))
+            : [],
+        });
+        setSensorData([]);
+      } else if (data.type === "nottrigger") {
+        setSensorData(
+          Array.isArray(data.data)
+            ? data.data.map((board: { id: any; distance: any; }) => ({
+                id: board.id,
+                distance: board.distance,
+              }))
+            : []
+        );
+        setTriggerData(null);
       }
-    };
-
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
+    });
+    
+  
+    socket.on("disconnect", () => {
+      console.log("Socket.IO disconnected.");
+    });
+  
     return () => {
-      socket.close();
+      socket.disconnect();
     };
   }, []);
-
-  const parseSensorData = (data: string): SensorData[] => {
-    return data
-      .split(", ")
-      .map((item) => {
-        const [idPart, distancePart] = item.replace(/[{}]/g, "").split(",");
-        const id = parseInt(idPart.split(":")[1]);
-        const distance = distancePart ? parseInt(distancePart.split(":")[1]) : null;
-        return { id, distance };
-      })
-      .filter((sensor) => !isNaN(sensor.id));
-  };
+  
+  
+  
+  
 
   const NoTriggerComponent = () => {
     const cardIds = Array.from({ length: 12 }, (_, index) => index + 1);
 
     return (
-      <>
+      <div>
         <p className="h2-cus">NO TRIGGER</p>
         <div className="sensor-cards">
           {cardIds.map((id) => {
@@ -123,14 +99,22 @@ const Home = () => {
                 <div className={`box ${isOnline ? "online" : "offline"}`}></div>
                 <div className="mg">
                   <h3>BOARD {id}</h3>
-                  {isOnline ? <p>{sensor?.distance?.toFixed(0)}</p> : <p>Offline</p>}
+                  {isOnline ? (
+                    <p>{sensor?.distance?.toFixed(0)}</p>
+                  ) : (
+                    <p>Offline</p>
+                  )}
                 </div>
-                <div className={`status ${isOnline ? "status-online" : "status-offline"}`}></div>
+                <div
+                  className={`status ${
+                    isOnline ? "status-online" : "status-offline"
+                  }`}
+                ></div>
               </div>
             );
           })}
         </div>
-      </>
+      </div>
     );
   };
 
@@ -138,7 +122,7 @@ const Home = () => {
     const foundBoards = triggerData?.foundBoards || [];
     const notFoundBoards = triggerData?.notFoundBoards || [];
     const allBoards = [...foundBoards, ...notFoundBoards];
-
+  
     return (
       <div>
         <p className="h2-cus">TRIGGER DATA</p>
@@ -156,13 +140,15 @@ const Home = () => {
           </p>
           <p>
             Not Found Boards:{" "}
-            <span>{notFoundBoards.map((board) => `id:${board.id}`).join(", ")}</span>
+            <span>
+              {notFoundBoards.map((board) => `id:${board.id}`).join(", ")}
+            </span>
           </p>
         </div>
         <div className="sensor-cards">
           {allBoards.map((board, index) => {
             const isFound = foundBoards.some((item) => item.id === board.id);
-
+  
             return (
               <div key={index} className="card">
                 <div className={`box ${isFound ? "online" : "offline"}`}></div>
@@ -170,7 +156,11 @@ const Home = () => {
                   <h3>BOARD {board.id}</h3>
                   <p>{isFound ? `Distance: ${board.distance}` : "Not Found"}</p>
                 </div>
-                <div className={`status ${isFound ? "status-online" : "status-offline"}`}></div>
+                <div
+                  className={`status ${
+                    isFound ? "status-online" : "status-offline"
+                  }`}
+                ></div>
               </div>
             );
           })}
@@ -178,6 +168,7 @@ const Home = () => {
       </div>
     );
   };
+  
 
   return (
     <div>
